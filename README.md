@@ -1,4 +1,4 @@
-# dask-scheduler-perfomance
+# dask-scheduler-performance
 
 
 Scripts to track time where Dask scheduler is spending time
