@@ -16,11 +16,12 @@ ENV="$TODAY-nightly-0.17"
 conda activate $ENV
 which python
 
-python nightly-run.py > dgx_raw_data.txt
+srun -N1 python nightly-run.py > dgx_raw_data.txt
 echo "Copy sitecustomize.py..."
 cp sitecustomize.py ${CONDA_PREFIX}/lib/python3.8/sitecustomize.py
-bash run-shuffle.sh
-python publish_benchmark.py
+srun -N1 bash run-shuffle.sh
+srun -N1 python publish_benchmark.py
 echo "Clean up sitecustomize.py..."
 rm ${CONDA_PREFIX}/lib/python3.8/sitecustomize.py
+rm *pstat*
 echo ALL_DONE

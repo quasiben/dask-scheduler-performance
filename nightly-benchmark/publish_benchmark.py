@@ -10,22 +10,23 @@ operations = ['simple', 'shuffle', 'rand-access']
 today = datetime.now().strftime("%Y%m%d")
 
 fname_hist = today + "-benchmark-history.png"
-hist_path = fname_hist
 
 if os.path.exists('/etc/dgx-release'):
     with open("dgx_raw_data.txt") as f:
         raw_data = f.read()
+        fname_hist = "dgx-" + fname_hist
 else:
     with open("raw_data.txt") as f:
         raw_data = f.read()
 
+hist_path = fname_hist
 repo = g.get_repo("quasiben/dask-scheduler-performance")
 
 print("Uploading HTML Profiles...")
 
 for op in operations:
     profile_name = f"{today}-{op}-scheduler.html"
-    profile_path = os.path.join(d, profile_name)
+    profile_path = profile_name
 
     repo.create_file(
         path=f"assets/{profile_name}",
@@ -70,13 +71,14 @@ if os.path.exists('/etc/dgx-release'):
     sched_graph = f"{today}-sched-graph.png"
     client_graph = f"{today}-client-graph.png"
     for p in [sched_graph, client_graph]:
+        print(f"\t{p}")
         repo.create_file(
                 path=f"assets/{p}",
                 message=f"{p} image {today}",
                 content=open(f"{p}", "rb").read(),
                 branch="benchmark-images",
         )
-    GRAPH_IMAGES = """
+    GRAPH_IMAGES = f"""
 ## Scheduler Execution Graph
 <img width="641" alt="Sched Graph Image"
 src="https://raw.githubusercontent.com/quasiben/dask-scheduler-performance/benchmark-images/assets/{sched_graph}">
@@ -86,6 +88,7 @@ src="https://raw.githubusercontent.com/quasiben/dask-scheduler-performance/bench
 <img width="641" alt="Client Graph Image"
 src="https://raw.githubusercontent.com/quasiben/dask-scheduler-performance/benchmark-images/assets/{client_graph}">
 """
+    template = template+GRAPH_IMAGES
 
 
 repo.create_issue(title=issue_name, body=template)
