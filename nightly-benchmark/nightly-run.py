@@ -1,3 +1,4 @@
+import os
 import dask
 import distributed
 from datetime import datetime
@@ -73,13 +74,19 @@ if __name__ == "__main__":
     print(f"Distributed Version: {distributed.__version__}")
 
     today = datetime.now().strftime("%Y%m%d")
-    history_file = "benchmark-historic-runs.csv"
+
+    bench_data_name = "benchmark-historic-runs.csv"
+    bench_image = f"{today}-benchmark-history.png"
+    if os.path.exists("/etc/dgx-release"):
+        bench_data_name = "dgx-" + bench_data_name
+        bench_image = "dgx-" + bench_image
+
 
     for idx, (k, v) in enumerate(data.items()):
         print(k)
         mean = np.format_float_scientific(v.mean(), precision=3)
         std = np.format_float_scientific(v.std(), precision=3)
-        with open(history_file, "a+") as f:
+        with open(bench_data_name, "a+") as f:
             f.write(f"{today},{k},{v.mean()},{v.std()}\n")
 
         print(f"\t {mean} +/- {std}")
@@ -90,9 +97,8 @@ if __name__ == "__main__":
         print(f"\t {v}")
 
     fig, ax = plt.subplots(1, 3, figsize=(10, 10))
-
     df = pd.read_csv(
-        "benchmark-historic-runs.csv",
+        bench_data_name,
         parse_dates=["date"],
         names=["date", "operation", "avg", "std"],
     )
@@ -103,4 +109,4 @@ if __name__ == "__main__":
         ax[idx].set_ylim(0, lim)
         plt.setp(ax[idx].get_xticklabels(), rotation=45)
 
-    plt.savefig(f"{today}-benchmark-history.png")
+    plt.savefig(bench_image)
