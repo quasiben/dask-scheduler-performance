@@ -74,18 +74,18 @@ def main():
     clim = da.groupby('day').mean(dim='time')
     anom = da.groupby('day') - clim
     anom_mean = anom.mean(dim='time')
-    with performance_report(filename=f"{today}-anon-mean-scheduler.html"):
-        anon_mean_t = []
+    with performance_report(filename=f"{today}-anom-mean-scheduler.html"):
+        anom_mean_t = []
         for i in range(iterations):
             start = time.time()
             anom_mean.compute()
             stop = time.time()
-            anon_mean_t.append(stop-start)
+            anom_mean_t.append(stop-start)
 
-        anon_mean_t = np.array(anon_mean_t)
+        anom_mean_t = np.array(anom_mean_t)
 
     return dict(simple=simple, shuffle=shuffle_t, rand_access=rand_access,
-            anon_mean=anon_mean_t)
+            anom_mean=anom_mean_t)
 
 if __name__ == "__main__":
     data = main()
