@@ -19,6 +19,13 @@ ENV="$TODAY-nightly-0.17"
 conda activate $ENV
 which python
 
+echo "Cythonize Distributed"
+pushd "${CONDA_PREFIX}/lib/python3.8/site-packages/"
+cythonize -i \
+	"distributed/protocol/serialize.py"
+	"distributed/scheduler.py"
+popd
+
 srun -N1 python nightly-run.py > dgx_raw_data.txt
 echo "Copy sitecustomize.py..."
 cp sitecustomize.py ${CONDA_PREFIX}/lib/python3.8/sitecustomize.py
