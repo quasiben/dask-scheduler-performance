@@ -8,7 +8,10 @@ source /etc/profile
 CONDA_ROOT=/gpfs/fs1/bzaitlen/miniconda3
 if test -f ~/.profile; then
         source ~/.profile
-    fi
+fi
+
+# Environment creation happens in a SLURM job here:
+# https://github.com/quasiben/dask-cuda-benchmarks/blob/main/slurm/create-env.sh
 source $CONDA_ROOT/etc/profile.d/conda.sh
 TODAY=`date +"%Y%m%d"`
 ENV="$TODAY-nightly-0.17"
