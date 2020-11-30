@@ -5,7 +5,7 @@ from github import Github
 
 g = Github(os.environ["GITHUB_ACCESS_TOKEN"])
 
-operations = ['simple', 'shuffle', 'rand-access']
+operations = ['simple', 'shuffle', 'rand-access', 'anon-mean']
 
 today = datetime.now().strftime("%Y%m%d")
 
@@ -62,6 +62,9 @@ src="https://raw.githubusercontent.com/quasiben/dask-scheduler-performance/bench
   Profile](https://raw.githack.com/quasiben/dask-scheduler-performance/benchmark-images/assets/{today}-rand-access-scheduler.html)
 - [Simple
   Profile](https://raw.githack.com/quasiben/dask-scheduler-performance/benchmark-images/assets/{today}-simple-scheduler.html)
+- [Anon
+  Mean](https://raw.githack.com/quasiben/dask-scheduler-performance/benchmark-images/assets/{today}-anon-mean-scheduler.html)
+
 
 """
 
