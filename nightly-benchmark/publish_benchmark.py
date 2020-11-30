@@ -62,7 +62,7 @@ src="https://raw.githubusercontent.com/quasiben/dask-scheduler-performance/bench
   Profile](https://raw.githack.com/quasiben/dask-scheduler-performance/benchmark-images/assets/{today}-rand-access-scheduler.html)
 - [Simple
   Profile](https://raw.githack.com/quasiben/dask-scheduler-performance/benchmark-images/assets/{today}-simple-scheduler.html)
-- [anom
+- [Anom
   Mean](https://raw.githack.com/quasiben/dask-scheduler-performance/benchmark-images/assets/{today}-anom-mean-scheduler.html)
 
 
