@@ -21,7 +21,7 @@ which python
 
 echo "Cythonize Distributed"
 pushd "${CONDA_PREFIX}/lib/python3.8/site-packages/"
-cythonize -i --directive="profile=True" \
+cythonize -i -3 --directive="profile=True" \
 	"distributed/protocol/serialize.py" \
 	"distributed/scheduler.py" \
 
