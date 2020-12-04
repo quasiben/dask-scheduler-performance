@@ -30,6 +30,7 @@ popd
 srun -N1 python nightly-run.py > dgx_raw_data.txt
 echo "Copy sitecustomize.py..."
 cp sitecustomize.py ${CONDA_PREFIX}/lib/python3.8/sitecustomize.py
+export DASK_OPTIMIZATION__FUSE__ACTIVE=False
 srun -N1 bash run-shuffle.sh
 srun -N1 python publish_benchmark.py
 echo "Clean up sitecustomize.py..."
