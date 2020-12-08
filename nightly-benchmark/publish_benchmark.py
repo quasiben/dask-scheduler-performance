@@ -73,7 +73,7 @@ if os.path.exists('/etc/dgx-release'):
     issue_name = "DGX " + issue_name
     sched_graph = f"{today}-sched-graph.png"
     client_graph = f"{today}-client-graph.png"
-    for p in [sched_graph, client_graph]:
+    for p in [sched_graph]:
         print(f"\t{p}")
         repo.create_file(
                 path=f"assets/{p}",
@@ -86,10 +86,6 @@ if os.path.exists('/etc/dgx-release'):
 <img width="641" alt="Sched Graph Image"
 src="https://raw.githubusercontent.com/quasiben/dask-scheduler-performance/benchmark-images/assets/{sched_graph}">
 
-
-## Client Execution Graph
-<img width="641" alt="Client Graph Image"
-src="https://raw.githubusercontent.com/quasiben/dask-scheduler-performance/benchmark-images/assets/{client_graph}">
 """
     template = template+GRAPH_IMAGES
 

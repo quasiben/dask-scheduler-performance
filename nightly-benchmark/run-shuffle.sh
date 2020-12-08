@@ -13,5 +13,3 @@ echo $SCHED_PID
 echo $CLIENT_PID
 
 gprof2dot -f pstats prof_${SCHED_PID}.pstat | dot -Tpng -o ${TODAY}-sched-graph.png
-CLIENT_PROF=`find . -iname "*.pstat" -execdir grep -l "persist" {} +`
-gprof2dot -f pstats ${CLIENT_PROF} | dot -Tpng -o ${TODAY}-client-graph.png
