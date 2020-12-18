@@ -14,7 +14,7 @@ fi
 # https://github.com/quasiben/dask-cuda-benchmarks/blob/main/slurm/create-env.sh
 source $CONDA_ROOT/etc/profile.d/conda.sh
 TODAY=`date +"%Y%m%d"`
-ENV="$TODAY-nightly-0.17"
+ENV="$TODAY-nightly-0.18"
 
 conda activate $ENV
 which python
