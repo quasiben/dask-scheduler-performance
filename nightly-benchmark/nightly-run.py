@@ -120,6 +120,7 @@ if __name__ == "__main__":
         parse_dates=["date"],
         names=["date", "operation", "avg", "std"],
     )
+    ax[0].set_ylabel("Time (s)")
     for idx, (key, group) in enumerate(df.groupby("operation")):
         ax[idx].set_title(f"{key}")
         ax[idx].errorbar(group.date, group.avg, yerr=group["std"].values)

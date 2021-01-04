@@ -47,7 +47,7 @@ repo.create_file(
 
 print("Creating Issue...")
 template = f"""
-## Historical Throughput
+## Benchmark history
 <img width="641" alt="Benchmark Image"
 src="https://raw.githubusercontent.com/quasiben/dask-scheduler-performance/benchmark-images/assets/{fname_hist}">
 
