@@ -1,0 +1,15 @@
+optimization:
+  fuse:
+    active: false
+
+distributed:
+  version: 2
+  worker:
+    profile:
+      interval: 10s        # Time between statistical profiling queries
+      cycle: 1000s         # Time between starting new profile
+      low-level: false     # Whether or not to include low-level functions
+  admin:
+    event-loop: uvloop
+    system-monitor:
+      interval: 1h
