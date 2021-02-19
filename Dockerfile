@@ -12,6 +12,8 @@ RUN conda create -n perf-dev -c conda-forge \
     && conda clean --all -y \
     && echo "conda activate perf-dev" >> ~/.bashrc
 
+ENV PATH /opt/conda/envs/perf-dev/bin:$PATH
+
 # Ensure subsequent RUN commands happen within the perf-dev conda environment
 SHELL ["conda", "run", "-n", "perf-dev", "/bin/bash", "-c"]
 
