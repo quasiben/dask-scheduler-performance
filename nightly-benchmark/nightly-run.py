@@ -14,16 +14,15 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 
+import assertions
+
 sns.set(font_scale=1.5, style="whitegrid")
 
 
 today = datetime.now().strftime("%Y%m%d")
 
 
-def main():
-    client = Client(n_workers=10, threads_per_worker=1)
-    print(client)
-
+def main(client: Client, filename_suffix: str = ""):
     df = dask.datasets.timeseries(
         start="2000-01-01",
         end="2000-01-31",
@@ -35,32 +34,32 @@ def main():
     wait(df)
     iterations = 10
 
-    with performance_report(filename=f"{today}-simple-scheduler.html"):
+    with performance_report(filename=f"{today}-simple-scheduler{filename_suffix}.html"):
         simple = []
         # print('start simple: ', flush=True)
         for i in range(iterations):
-            start = time.time()
+            start = time.perf_counter()
             z = df.x + 1 + 2 - df.y
             z.sum().compute()
-            stop = time.time()
+            stop = time.perf_counter()
             simple.append(stop - start)
         simple = np.array(simple)
 
     df2 = None
-    with performance_report(filename=f"{today}-shuffle-scheduler.html"):
+    with performance_report(filename=f"{today}-shuffle-scheduler{filename_suffix}.html"):
         shuffle_t = []
         # print('start shuffle: ', flush=True)
         for i in range(iterations):
             client.cancel(df2)
-            start = time.time()
+            start = time.perf_counter()
             # shuffle(df, "id", shuffle="tasks")
             df2 = df.set_index("id").persist()
             wait(df2)
-            stop = time.time()
+            stop = time.perf_counter()
             shuffle_t.append(stop - start)
         shuffle_t = np.array(shuffle_t)
 
-    with performance_report(filename=f"{today}-rand-access-scheduler.html"):
+    with performance_report(filename=f"{today}-rand-access-scheduler{filename_suffix}.html"):
         rand_access = []
         for i in range(iterations):
             start = time.time()
@@ -74,7 +73,7 @@ def main():
     clim = da.groupby('day').mean(dim='time')
     anom = da.groupby('day') - clim
     anom_mean = anom.mean(dim='time')
-    with performance_report(filename=f"{today}-anom-mean-scheduler.html"):
+    with performance_report(filename=f"{today}-anom-mean-scheduler{filename_suffix}.html"):
         anom_mean_t = []
         for i in range(iterations):
             start = time.time()
@@ -88,13 +87,41 @@ def main():
             anom_mean=anom_mean_t)
 
 if __name__ == "__main__":
-    data = main()
+    import sys
+
+    if sys.argv[-1] == "coiled":
+        import coiled
+        start = time.perf_counter()
+        cluster = coiled.Cluster(
+            # name="scheduler-benchmark",
+            n_workers=10,
+            worker_memory="30 GiB",
+            worker_cpu=4, # because AWS requires it to get 30gib of memory
+            worker_options={"nthreads": 1},
+            scheduler_cpu=1,
+            scheduler_memory="8 GiB",
+            software="gjoseph92/scheduler-benchmark",
+            shutdown_on_close=True,
+        )
+        elapsed = time.perf_counter() - start
+        print(f"Created Coiled cluster in {elapsed / 60:.1f} min")
+        client = Client(cluster)
+        filename_suffix = "-coiled"
+    else:
+        client = Client(n_workers=10, threads_per_worker=1)
+        filename_suffix = ""
+
+    print(client)
     print(f"Distributed Version: {distributed.__version__}")
+    assertions.check_scheduler_is_cythonized(client)
+    assertions.check_config(client)
+    data = main(client, filename_suffix=filename_suffix)
+    del client  # so it shuts down
 
     today = datetime.now().strftime("%Y%m%d")
 
-    bench_data_name = "benchmark-historic-runs.csv"
-    bench_image = f"{today}-benchmark-history.png"
+    bench_data_name = f"benchmark-historic-runs{filename_suffix}.csv"
+    bench_image = f"{today}-benchmark-history{filename_suffix}.png"
     if os.path.exists("/etc/dgx-release"):
         bench_data_name = "dgx-" + bench_data_name
         bench_image = "dgx-" + bench_image
