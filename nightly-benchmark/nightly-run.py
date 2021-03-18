@@ -116,7 +116,7 @@ if __name__ == "__main__":
     assertions.check_scheduler_is_cythonized(client)
     assertions.check_config(client)
     data = main(client, filename_suffix=filename_suffix)
-    del client  # so it shuts down
+    client.shutdown()
 
     today = datetime.now().strftime("%Y%m%d")
 
