@@ -91,6 +91,8 @@ if __name__ == "__main__":
 
     if sys.argv[-1] == "coiled":
         import coiled
+        software = dask.config.get("benchmark.software", "gjoseph92/scheduler-benchmark")
+        print(f"Using software environment {software!r} for cluster.")
         start = time.perf_counter()
         cluster = coiled.Cluster(
             # name="scheduler-benchmark",
@@ -100,7 +102,7 @@ if __name__ == "__main__":
             worker_options={"nthreads": 1},
             scheduler_cpu=1,
             scheduler_memory="8 GiB",
-            software="gjoseph92/scheduler-benchmark",
+            software=software,
             shutdown_on_close=True,
         )
         elapsed = time.perf_counter() - start
@@ -113,8 +115,9 @@ if __name__ == "__main__":
 
     print(client)
     print(f"Distributed Version: {distributed.__version__}")
-    assertions.check_scheduler_is_cythonized(client)
-    assertions.check_config(client)
+    if dask.config.get("benchmark.checks", False):
+        assertions.check_scheduler_is_cythonized(client)
+        assertions.check_config(client)
     data = main(client, filename_suffix=filename_suffix)
     client.shutdown()
 
