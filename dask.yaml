@@ -4,9 +4,6 @@ optimization:
 
 distributed:
   version: 2
-  worker:
-    profile:
-      low-level: true
   admin:
     event-loop: uvloop
 
