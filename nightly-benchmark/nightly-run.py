@@ -97,8 +97,9 @@ if __name__ == "__main__":
         cluster = coiled.Cluster(
             # name="scheduler-benchmark",
             n_workers=10,
-            worker_memory="30 GiB",
-            worker_cpu=4, # because AWS requires it to get 30gib of memory
+            worker_memory="54 GiB",
+            worker_cpu=1,
+            # ^ NOTE: Coiled VM backend required to get these resources
             worker_options={"nthreads": 1},
             scheduler_cpu=1,
             scheduler_memory="8 GiB",
