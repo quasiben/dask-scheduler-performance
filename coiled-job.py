@@ -51,11 +51,6 @@ def run_job(v230=False):
     coiled.start_job(V230_JOB if v230 else NIGHTLY_JOB)
 
 if __name__ == "__main__":
-    # import sys
-
-    # v230 = sys.argv[-1] == "v230"
-
-    # create_job_config(v230=True)
-    # run_job(v230=True)
+    # TODO also create job configs, once we can get secrets into coiled jobs.
     create_notebook(v230=False)
     create_notebook(v230=True)

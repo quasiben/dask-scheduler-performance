@@ -95,7 +95,6 @@ if __name__ == "__main__":
         print(f"Using software environment {software!r} for cluster.")
         start = time.perf_counter()
         cluster = coiled.Cluster(
-            # name="scheduler-benchmark",
             n_workers=10,
             worker_memory="54 GiB",
             worker_cpu=1,
