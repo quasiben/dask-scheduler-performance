@@ -1,0 +1,3 @@
+benchmark:
+  software: "gjoseph92/scheduler-benchmark-230"
+  checks: false
